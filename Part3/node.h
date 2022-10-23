@@ -37,25 +37,74 @@ public:
     NodeIterator(Node<T>* currentIn)
         : current(currentIn) {        
     }
-
+    
     T & operator*() {
         return current->data;
     }
 
+    Node<T>* getNode()
+    {
+        return current;
+    }
+
     // TODO: complete the code for NodeIterator here
-    void operator++()
+    NodeIterator<T> operator++()
     {
         current = current->next;
+        return *this;
     }
     bool operator==(NodeIterator<T> other)
     {
-        return &other == this;
+        Node<T>* other_node_ptr = other.current;
+        return (other_node_ptr == this->current);
     }
     bool operator!=(NodeIterator<T> other)
     {
-        return !(&other == this);
+        Node<T>* other_node_ptr = other.current;
+        return !(other_node_ptr == this->current);
+    }
+
+    
+};
+template<typename T>
+class ConstNodeIterator {
+  
+private:
+    
+    Node<T>* current;
+    
+public:
+    
+
+    ConstNodeIterator(Node<T>* currentIn)
+        : current(currentIn) {        
     }
     
+    T const& operator*(){
+        return current->data;
+    }
+
+    Node<T>* getNode() const
+    {
+        return current;
+    }
+
+    // TODO: complete the code for NodeIterator here
+    ConstNodeIterator<T> operator++()
+    {
+        current = current->next;
+        return *this;
+    }
+    bool operator==(ConstNodeIterator<T> other) const
+    {
+        Node<T>* other_node_ptr = other.current;
+        return (other_node_ptr == this->current);
+    }
+    bool operator!=(ConstNodeIterator<T> other) const
+    {
+        Node<T>* other_node_ptr = other.current;
+        return !(other_node_ptr == this->current);
+    }
 };
 
 // do not edit below this line

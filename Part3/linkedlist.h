@@ -2,7 +2,8 @@
 #define LINKEDLIST_H
 
 #include "node.h"
-
+#include <initializer_list>
+using std::initializer_list;
 #include <utility>
 
 // Do not add any #include statements here.  If you have a convincing need for adding a different `#include` please post in the forum on KEATS.
@@ -19,6 +20,14 @@ class LinkedList{
         head = nullptr;
         tail = nullptr;
         length = 0;
+    }
+    LinkedList(initializer_list<T> l)
+    {   
+        length = 0;
+        for(auto list_item:l)
+        {
+            this->push_back(list_item);
+        }
     }
     void push_front(T param_data)
     {
@@ -74,6 +83,14 @@ class LinkedList{
     {
         return NodeIterator<T>(nullptr);
     }
+    ConstNodeIterator<T> begin() const
+    {
+        return ConstNodeIterator<T>(head);
+    }
+    ConstNodeIterator<T> end() const
+    {
+        return ConstNodeIterator<T>(nullptr);
+    }
     ~LinkedList()
     {
         Node<T>* move = head;
@@ -89,8 +106,7 @@ class LinkedList{
         Node<T>* temp = NULL;
         Node<T>* current = head;
  
-        /* swap next and prev for all nodes of
-        doubly linked list */
+        
          while (current != NULL) {
             temp = current->previous;
             current->previous = current->next;
@@ -98,10 +114,31 @@ class LinkedList{
             current = current->previous;
     }
  
-    /* Before changing the head, check for the cases like
-       empty list and list with only one node */
+    
     if (temp != NULL)
         head = (temp->previous);
+    }
+    NodeIterator<T> insert(NodeIterator<T>ptr,T data)
+    {
+        Node<T>* ins = ptr.getNode();
+        Node<T>* ins_next = ins->next;
+        Node<T>* ins_prev = ins->previous;
+        Node<T>* new_node = new Node<T>(data);
+        new_node->next = ins;
+        new_node->previous = ins_prev;
+        ins_prev->next = new_node;
+        ins_prev = new_node;
+        return NodeIterator(new_node);
+    }
+    NodeIterator<T> erase(NodeIterator<T>ptr)
+    {
+        Node<T>* ins = ptr.getNode();
+        Node<T>* ins_next = ins->next;
+        Node<T>* ins_prev = ins->previous;
+        ins_next->previous = ins_prev;
+        ins_prev->next = ins_next;
+        delete ins;
+        return NodeIterator(ins_next);
     }
 };
 
