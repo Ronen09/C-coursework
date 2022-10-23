@@ -128,7 +128,7 @@ class LinkedList{
         new_node->previous = ins_prev;
         ins_prev->next = new_node;
         ins_prev = new_node;
-        return NodeIterator(new_node);
+        return NodeIterator<T>(new_node);
     }
     NodeIterator<T> erase(NodeIterator<T>ptr)
     {
@@ -138,7 +138,7 @@ class LinkedList{
         ins_next->previous = ins_prev;
         ins_prev->next = ins_next;
         delete ins;
-        return NodeIterator(ins_next);
+        return NodeIterator<T>(ins_next);
     }
 };
 
