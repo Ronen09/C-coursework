@@ -63,7 +63,6 @@ int main() {
         
         ostringstream s;
         root->write(s);
-        
         if(s.str() == " 1  2  3  4 "){
             cout << "7) Pass: the tree prints correctly\n";
         } else {

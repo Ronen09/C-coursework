@@ -4,9 +4,11 @@
 #include <cmath>
 #include <iostream>
 #include <string>
+#include <sstream>
 using std::ostream;
 using std::cout;
 using std::string;
+using std::stringstream;
 
 const string quote = "\"";
 // TODO: your code  goes here
@@ -27,6 +29,65 @@ class CovidCase
         age = a;
         hours = b;
     }
+    CovidCase(string s)
+    {   
+        int count = 1;
+        int last_occ = 0;
+        for(int i = 0;i<s.size();i++)
+        {   
+            if(s[i] == ',')
+            {
+                string subst = s.substr(last_occ,i-last_occ);
+                subst = subst.substr(subst.find_first_not_of(' '));
+                switch (count)
+                {
+                case 1:
+                    latitude = stod(subst);
+                    last_occ = i+1;
+                    count++;
+                    break;
+                case 2:
+                    longitude = stod(subst);
+                    last_occ = i+1;
+                    count++;
+                    break;
+                case 3:
+                    name = subst;
+                    last_occ = i+1;
+                    count++;
+                    break;
+                case 4:
+                    age = stoi(subst);
+                    last_occ = i+1;
+                    count++;
+                    break;
+                default:
+                    break;
+                }
+            }
+        }
+        hours = stoi(s.substr(last_occ,s.size()-last_occ));
+    }
+    double getLatitude()
+    {
+        return this->latitude;
+    }
+    double getLongitude()
+    {
+        return this->longitude;
+    }
+    string getName()
+    {
+        return this->name;
+    }
+    int getAge()
+    {
+        return this->age;
+    }
+    int getTime()
+    {
+        return this->hours;
+    }
     double distanceTo(CovidCase other)
     {   
         double lat1 = this->latitude * (M_PI/180);
@@ -43,7 +104,7 @@ class CovidCase
     friend std::ostream &operator<<(std::ostream &output,CovidCase &patient);
     bool operator==(const CovidCase& patient)
     {
-        if(this.latitude == patient->latitude && this.longitude == patient->longitude && this.name == patient->name && this.age == patient->age && this.hours == patient->hours)
+        if(this->latitude == patient.latitude && this->longitude == patient.longitude && this->name == patient.name && this->age == patient.age && this->hours == patient.hours)
         {
             return true;
         }
