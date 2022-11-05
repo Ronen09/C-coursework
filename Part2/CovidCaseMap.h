@@ -49,7 +49,7 @@ class CovidCaseMap
                         numberOfCases++;
                         casesOverTime.push_back(TimeAndCaseData(i,numberOfCases));
                     }
-                    if(cases[j].getTime() + 120 == i)
+                    if(cases[j].getTime() + time == i)
                     {
                         numberOfCases--;
                         casesOverTime.push_back(TimeAndCaseData(i,numberOfCases));
