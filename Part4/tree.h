@@ -48,7 +48,7 @@ class BinarySearchTree{
                 }
             }
         }
-        write(ostream& out) const
+        void write(ostream& out) const
         {
             if(root != nullptr)
             {
