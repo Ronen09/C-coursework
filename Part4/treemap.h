@@ -20,7 +20,7 @@ public:
     }
     bool operator==(KeyValuePair<Key, Value> pair) const
     {
-        return v == pair.v;
+        return k == pair.k;
     }
     
     
@@ -55,8 +55,8 @@ public:
     // TODO your code for TreeMap goes here:
     KeyValuePair<Key,Value> * find(const Key & k) const
     {
-        KeyValuePair<Key,Value> * pair = new KeyValuePair<Key,Value>(k);
-        TreeNode<KeyValuePair<Key,Value> > * node = tree.find(*pair);
+        KeyValuePair<Key,Value> pair = KeyValuePair<Key,Value>(k);
+        TreeNode<KeyValuePair<Key,Value> > * node = tree.find(pair);
         if(node == NULL)
         {
             return NULL;
@@ -75,3 +75,4 @@ public:
 // do not edit below this line
 
 #endif
+

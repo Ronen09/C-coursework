@@ -106,6 +106,11 @@ double evaluateCountdown(string s)
                 stack.pop_back();
                 b = stack[stack.size() - 1];
                 stack.pop_back();
+                if(a == 0)
+                {
+                    stack.push_back(0);
+                    continue;
+                }
                 new_num = b/a;
                 stack.push_back(new_num);
             }
@@ -143,137 +148,51 @@ char getOpr(int i)
     }
     return ' ';
 }
-
-CountdownSolution solveCountdownProblem(vector<int> numbers,int target)
-{  
-    string solution = "";
-    int value = 0;
-    string best_solution;
-    int best_value = 0;
+vector<vector<int>> getNumberPermutations(vector<int> &numbers)
+{
+    vector<vector<int>> permutations;
     for(int i = 0;i<numbers.size();i++)
     {   
-        solution = "";
-        value = 0;
-        solution = solution + intToString(numbers[i]) + " ";
         for(int j = 0;j<numbers.size();j++)
         {   
             if(i == j)
             {
                 continue;
             }
-            solution = solution + intToString(numbers[j]) + " ";
-            for(int k = 0;k<5;k++)
+            for(int k = 0;k<numbers.size();k++)
             {   
-                if(getOpr(k) == '_')
+                if(k == i || k == j)
                 {
                     continue;
                 }
-                solution = solution + getOpr(k) + " ";
-                if(target == evaluateCountdown(solution))
-                {
-                    return CountdownSolution(solution,target);
-                }
-                if(target - evaluateCountdown(solution) < target - best_value)
-                {
-                    best_solution = solution;
-                    best_value = evaluateCountdown(solution);
-                }
                 for(int l = 0;l<numbers.size();l++)
                 {   
-                    if(l == i || l == j)
+                    if(l == i || l == j || l == k)
                     {
                         continue;
                     }
-                    solution = solution + intToString(numbers[l]) + " ";
-                    for(int m = 0;m<5;m++)
+                    for(int m = 0;m<numbers.size();m++)
                     {   
-                        if(getOpr(m) == '_')
+                        if(m == i || m == j || m == k || m == l)
                         {
                             continue;
                         }
-                        solution = solution + getOpr(m) + " ";
-                        if(target == evaluateCountdown(solution))
-                        {
-                            return CountdownSolution(solution,target);
-                        }
-                        if(target - evaluateCountdown(solution) < target - best_value)
-                        {
-                            best_solution = solution;
-                            best_value = evaluateCountdown(solution);
-                        }
                         for(int n = 0;n<numbers.size();n++)
                         {   
-                            if(n == i || n == j || n == l)
+                            if(n == i || n == j || n == k || n == l || n == m)
                             {
                                 continue;
                             }
-                            solution = solution + intToString(numbers[n]) + " ";
-                            for(int o = 0;o<5;o++)
-                            {   
-                                if(getOpr(o) == '_')
-                                {
-                                    continue;
-                                }
-                                if(target == evaluateCountdown(solution))
-                                {
-                                    return CountdownSolution(solution,target);
-                                }
-                                solution = solution + getOpr(o) + " ";
-                                if(target - evaluateCountdown(solution) < target - best_value)
-                                {
-                                    best_solution = solution;
-                                    best_value = evaluateCountdown(solution);
-                                }
-                                for(int p = 0;p<numbers.size();p++)
-                                {   
-                                    if(p == i || p == j || p == l || p == n)
-                                    {
-                                        continue;
-                                    }
-                                    solution = solution + intToString(numbers[p]) + " ";
-                                    for(int q = 0;q<5;q++)
-                                    {   
-                                        if(getOpr(q) == '_')
-                                        {
-                                            continue;
-                                        }
-                                        solution = solution + getOpr(q) + " ";
-                                        if(target == evaluateCountdown(solution))
-                                        {
-                                            return CountdownSolution(solution,target);
-                                        }
-                                        if(target - evaluateCountdown(solution) < target - best_value)
-                                        {
-                                            best_solution = solution;
-                                            best_value = evaluateCountdown(solution);
-                                        }
-                                        for(int r = 0;r<numbers.size();r++)
-                                        {   
-                                            if(r == i || r == j || r == l || r == n || r == p)
-                                            {
-                                                continue;
-                                            }
-                                            solution = solution + intToString(numbers[r]) + " ";
-                                            for(int s = 0;s<5;s++)
-                                            {
-                                                if(getOpr(s) == '_')
-                                                {
-                                                    continue;
-                                                }
-                                                if(target == evaluateCountdown(solution))
-                                                {
-                                                    return CountdownSolution(solution,target);
-                                                }
-                                                solution = solution + getOpr(s) + " ";
-                                                if(target - evaluateCountdown(solution) < target - best_value)
-                                                {
-                                                    best_solution = solution;
-                                                    best_value = evaluateCountdown(solution);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                            else
+                            {
+                                vector<int> permutation;
+                                permutation.push_back(numbers[i]);
+                                permutation.push_back(numbers[j]);
+                                permutation.push_back(numbers[k]);
+                                permutation.push_back(numbers[l]);
+                                permutation.push_back(numbers[m]);
+                                permutation.push_back(numbers[n]);
+                                permutations.push_back(permutation);
                             }
                         }
                     }
@@ -281,7 +200,96 @@ CountdownSolution solveCountdownProblem(vector<int> numbers,int target)
             }
         }
     }
-    return CountdownSolution(best_solution, best_value);
+    return permutations;
+}
+CountdownSolution solveCountdownProblem(vector<int> numbers, int targetnum)
+{
+    string tem;
+    double result;
+    string algo = "+-*/";
+    vector<vector<int>> permutations = getNumberPermutations(numbers);
+    for(vector<int> permutation : permutations){
+        for(int a = 0; a < 4; a++)
+        {
+            for(int b = 0; b < 4; b++)
+            {
+                tem = intToString(permutation[0])+ " " + intToString(permutation[1]) + " " + intToString(permutation[2]) + " " + algo[a] + " " + algo[b] ;
+                result = evaluateCountdown(tem);
+                if(result == targetnum)
+                {
+                    cout<<tem<<endl;
+                    return CountdownSolution(tem, result);
+                }
+            }
+        }
+    }
+    for(vector<int> permutation : permutations){
+        for(int a = 0; a < 4; a++)
+        {
+            for(int b = 0; b < 4; b++)
+            {
+                for(int c = 0; c < 4; c++)
+                {
+                            tem = intToString(permutation[0])+ " " + intToString(permutation[1]) + " " + intToString(permutation[2]) + " " + intToString(permutation[3]) + " " + algo[a] + " " + algo[b] + " " + algo[c];
+                            result = evaluateCountdown(tem);
+                            if(result == targetnum)
+                            {
+                                cout<<tem<<endl;
+                                return CountdownSolution(tem, result);
+                            }
+                }
+            }
+        }
+    }
+
+    for(vector<int> permutation : permutations){
+        for(int a = 0; a < 4; a++)
+        {
+            for(int b = 0; b < 4; b++)
+            {
+                for(int c = 0; c < 4; c++)
+                {
+                    for(int d = 0; d < 4; d++)
+                    {
+                            tem = intToString(permutation[0])+ " " + intToString(permutation[1]) + " " + intToString(permutation[2]) + " " + intToString(permutation[3]) + " " + intToString(permutation[4]) + " " + algo[a] + " " + algo[b] + " " + algo[c] + " " + algo[d];
+                            result = evaluateCountdown(tem);
+                            if(result == targetnum)
+                            {
+                                cout<<tem<<endl;
+                                return CountdownSolution(tem, result);
+                            }
+                    }
+                }
+            }
+        }
+    }
+
+    for(vector<int> permutation : permutations){
+        for(int a = 0; a < 4; a++)
+        {
+            for(int b = 0; b < 4; b++)
+            {
+                for(int c = 0; c < 4; c++)
+                {
+                    for(int d = 0; d < 4; d++)
+                    {
+                        for(int e = 0; e < 4; e++)
+                        {
+                            tem = intToString(permutation[0])+ " " + intToString(permutation[1]) + " " + intToString(permutation[2]) + " " + intToString(permutation[3]) + " " + intToString(permutation[4]) + " " + intToString(permutation[5]) + " " + algo[a] + " " + algo[b] + " " + algo[c] + " " + algo[d] + " " + algo[e];
+                            result = evaluateCountdown(tem);
+                            if(result == targetnum)
+                            {
+                                cout<<tem<<endl;
+                                return CountdownSolution(tem, result);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return CountdownSolution(tem, result);
 }
 
 

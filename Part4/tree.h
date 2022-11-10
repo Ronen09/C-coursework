@@ -62,7 +62,7 @@ class BinarySearchTree{
                 root = unique_ptr<TreeNode<T>>(new TreeNode<T>(data));
                 return root.get();
             }
-            else
+            int balance = 0;
             {
                 TreeNode<T>* current = root.get();
                 while(true)
@@ -72,6 +72,8 @@ class BinarySearchTree{
                         if(current->leftChild == nullptr)
                         {
                             current->setLeftChild(new TreeNode<T>(data));
+                            current = current->leftChild.get();
+                            return current;
                             break;
                         }
                         else
@@ -84,7 +86,8 @@ class BinarySearchTree{
                         if(current->rightChild == nullptr)
                         {
                             current->setRightChild(new TreeNode<T>(data));
-                            return current->rightChild.get();
+                            current = current->rightChild.get();
+                            return current;
                             break;
                         }
                         else
@@ -99,6 +102,7 @@ class BinarySearchTree{
                 }
             }
         }
+        
         TreeNode<T>* find(T data) const
         {
             if(root == nullptr)
@@ -139,6 +143,35 @@ class BinarySearchTree{
                 }
             }
         }
+        TreeNodeIterator<T> begin()
+        {   
+            if(root == nullptr)
+            {
+                return TreeNodeIterator<T>(nullptr);
+            }
+            TreeNode<T>* current = root.get();
+            while(current->leftChild != nullptr)
+            {
+                current = current->leftChild.get();
+            }
+            return TreeNodeIterator<T>(current);
+        }
+        TreeNodeIterator<T> end()
+        {
+            return TreeNodeIterator<T>(nullptr);
+        }
+        int maxDepth()
+        {   
+            if(root == nullptr)
+            {
+                return 0;
+            }
+            else
+            {
+                return root.get()->maxDepth();
+            }
+        }
+    
 };
 
 
