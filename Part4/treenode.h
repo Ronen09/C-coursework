@@ -24,17 +24,17 @@ class TreeNode {
     unique_ptr<TreeNode<T>> rightChild;
     TreeNode<T>* parent;
     TreeNode(const T &param_data) : data(param_data), leftChild(nullptr), rightChild(nullptr), parent(nullptr) {}
-    setLeftChild(TreeNode<T>* child)
+    void setLeftChild(TreeNode<T>* child)
     {
         leftChild = unique_ptr<TreeNode<T>>(child);
         child->parent = this;
     }
-    setRightChild(TreeNode<T>* child)
+    void setRightChild(TreeNode<T>* child)
     {
         rightChild = unique_ptr<TreeNode<T>>(child);
         child->parent = this;
     }
-    write(ostream& out) const
+    void write(ostream& out) const
     {
         if(leftChild != nullptr)
         {
