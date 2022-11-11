@@ -46,22 +46,28 @@ class TreeNode {
             rightChild->write(out);
         }
     }
+    
+    int balanceFactor(){
+        int balance=0;
+        balance = rightChild->maxDepth()-leftChild->maxDepth();
+        return balance;
+    }
     int maxDepth()
-        {
+    {
             // Root being null means tree doesn't exist.
-            if (this == NULL)
-                return 0;
+        if (this == nullptr)
+        {
+            return 0;
+        }
         
-            // Get the depth of the left and right subtree 
-            // using recursion.
-            int leftDepth = this->leftChild.get()->maxDepth();
-            int rightDepth = this->rightChild.get()->maxDepth();
+        int leftDepth = this->leftChild.get()->maxDepth();
+        int rightDepth = this->rightChild.get()->maxDepth();
 
-            // Choose the larger one and add the root to it.
-            if (leftDepth > rightDepth)
-                return leftDepth + 1;
-            else
-                return rightDepth + 1;
+        // Choose the larger one and add the root to it.
+        if (leftDepth > rightDepth)
+            return leftDepth + 1;
+        else
+            return rightDepth + 1;
         }
     TreeNode<T>* operator=(TreeNode<T>* node)
     {
